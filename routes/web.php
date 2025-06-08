@@ -24,6 +24,8 @@ Route::get('/posts/create', [PostController::class, 'create'])->name('posts.crea
     ->middleware('auth');
 Route::post('/posts', [PostController::class, 'store'])->name('posts.store')
     ->middleware('auth');
+Route::get('/{user:username}/posts/{post}', [PostController::class, 'show'])->name('posts.show')
+    ->middleware('auth');
 
 Route::post('/imagenes', [ImagenController::class, 'store'])->name('images.store')
     ->middleware('auth');
