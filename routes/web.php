@@ -6,6 +6,7 @@ use App\Http\Controllers\ComentarioController;
 use App\Http\Controllers\ImagenController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\LogoutController;
+use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 
@@ -19,6 +20,12 @@ Route::post('/crear-cuenta', [RegisterController::class, 'store']);
 Route::get('/iniciar-sesion', [LoginController::class, 'index'])->name('login');
 Route::post('/iniciar-sesion', [LoginController::class, 'store']);
 Route::post('/cerrar-sesion', [LogoutController::class, 'store'])->name('logout');
+
+// Rutas para el perfil
+Route::get('/editar-perfil', [PerfilController::class, 'index'])->name('perfil.index')
+    ->middleware('auth');
+Route::post('/editar-perfil', [PerfilController::class, 'store'])->name('perfil.store')
+    ->middleware('auth');
 
 Route::get('/{user:username}', [PostController::class, 'index'])->name('posts.index');
 Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create')
