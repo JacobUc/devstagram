@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\ComentarioController;
 use App\Http\Controllers\ImagenController;
+use App\Http\Controllers\LikeController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
@@ -32,4 +33,10 @@ Route::post('/{user:username}/posts/{post}', [ComentarioController::class, 'stor
     ->middleware('auth');
 
 Route::post('/imagenes', [ImagenController::class, 'store'])->name('images.store')
+    ->middleware('auth');
+
+// Like a las fotos
+Route::post('/posts/{post}/likes', [LikeController::class, 'store'])->name('posts.likes.store')
+    ->middleware('auth');
+Route::delete('/posts/{post}/likes', [LikeController::class, 'destroy'])->name('posts.likes.destroy')
     ->middleware('auth');
