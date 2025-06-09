@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\ComentarioController;
+use App\Http\Controllers\FollowerController;
 use App\Http\Controllers\ImagenController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\LogoutController;
@@ -47,3 +48,9 @@ Route::post('/posts/{post}/likes', [LikeController::class, 'store'])->name('post
     ->middleware('auth');
 Route::delete('/posts/{post}/likes', [LikeController::class, 'destroy'])->name('posts.likes.destroy')
     ->middleware('auth');
+
+// Seguidores
+Route::post('/{user}/follow', [FollowerController::class, 'store'])->name('users.follow')
+    ->middleware('auth');
+Route::delete('/{user}/unfollow', [FollowerController::class, 'destroy'])->name('users.unfollow')
+        ->middleware('auth');

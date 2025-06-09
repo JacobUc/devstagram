@@ -33,14 +33,37 @@
                 </div>
 
                 <p class="text-gray-800 text-sm mb-3 font-bold mt-5">
-                    0
-                    <span class="font-normal">Seguidores</span>
+                    {{ $user->followers->count() }}
+                    <span class="font-normal"> @choice('Seguidor|Seguidores', $user->followers->count()) </span>
                 </p>
-
+                
                 <p class="text-gray-800 text-sm mb-3 font-bold">
-                    0
+                    {{ $user->followings->count() }}
                     <span class="font-normal">Siguiendo</span>
                 </p>
+
+                @auth
+                    @if ($user->id !== auth()->user()->id)
+                        @if ( !$user->siguiendo( auth()->user() ) )
+                            <form action="{{ route('users.follow', $user) }}" method="POST">
+                                @csrf
+                                <input 
+                                    type="submit"
+                                    value="Seguir Cuenta"
+                                    class="bg-sky-600 hover:bg-sky-700 transition-colors cursor-pointer uppercase text-sm font-bold w-full px-3 py-1 text-white rounded-lg">
+                            </form>
+                        @else
+                            <form action="{{ route('users.unfollow', $user) }}" method="POST">
+                                @method('DELETE')
+                                @csrf
+                                <input 
+                                    type="submit"
+                                    value="Dejar de Seguir"
+                                    class="bg-red-700 hover:bg-red-800 transition-colors cursor-pointer uppercase text-sm font-bold w-full px-3 py-1 text-white rounded-lg">
+                            </form>
+                        @endif
+                    @endif
+                @endauth
 
                 <p class="text-gray-800 text-sm mb-3 font-bold">
                     {{ $user->posts->count() }}
