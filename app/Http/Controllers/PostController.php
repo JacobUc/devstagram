@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Comentario;
 use App\Models\Post;
 use App\Models\User;
+use App\Models\Comentario;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 
 class PostController extends Controller
 {
@@ -47,5 +49,24 @@ class PostController extends Controller
             'post' =>$post,
             'user' => $user
         ]);
+    }
+
+    public function destroy(Request $request, Post $post)
+    {
+        // Validar que el usuario sea el autor de la publicacion (PostPolicy)
+        if($request->user()->cannot('delete', $post)){
+            abort(403, 'Sin los permisos');
+        }
+        
+        $post->delete();
+        
+        // Eliminar la imagen
+        $imagenPath = public_path('uploads/' . $post->imagen);
+        
+        if(File::exists($imagenPath)){
+            unlink($imagenPath);
+        }
+        
+        return redirect()->route('posts.index', Auth::user()->username);
     }
 }
